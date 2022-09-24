@@ -1,0 +1,65 @@
+.Deposit {
+  max-width: 80vh;
+  max-height: 80vh;
+  padding: 60px 100px;
+  margin: 0 auto;
+  text-align: left;
+}
+
+input {
+  font-size: 16px;
+  width: 30%;
+  border-color: rgba(4, 4, 5, 0.1);
+  line-height: 32px;
+  text-align: center;
+}
+
+input:focus {
+  outline: none;
+  border-color: rgba(4, 4, 5, 0.4);
+}
+
+button {
+  padding: 9px 16px;
+  max-height: 40px;
+  border-color: #254cdd;
+  color: #254cdd;
+  background-color: white;
+  border-radius: 8px;
+  align-items: center;
+  font-size: 16px;
+  font-weight: 500;
+  text-align: center;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+button:hover {
+  margin-top: -1px;
+}
+
+.wallet-btn {
+  text-align: right;
+  float: right;
+  margin-bottom: 50px;
+  line-height: 16px;
+}
+
+#deposit-btn {
+  background-color: #254cdd;
+  color: white;
+  margin: 50px auto;
+  display: block;
+}
+
+.currency-module {
+  margin-top: 250px;
+  display: flex;
+  justify-content: center;
+}
+.currency-unit {
+  width: 110px;
+}
+.trx-result {
+  text-align: center;
+}
