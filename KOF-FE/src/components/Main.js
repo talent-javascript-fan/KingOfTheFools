@@ -38,19 +38,18 @@ const Main = () => {
 	const [approve, setApprove] = useState(false);
 	const [trxStatus, setTrxStatus] = useState("");
 
-	useEffect(async () => {
-		await getExchangeRate();
+	useEffect(() => {
+		const getExchangeRate = async () => {
+			const exchangeRate = await axios.get(ETHUSDC_URL);
+			setRate(exchangeRate.data.USDC);
+		}
+		getExchangeRate();
 		const interval = setInterval(() => {
 			eventListner();
 		}, 2000);
 		return () => clearInterval(interval);
 	}, []);
 
-	const getExchangeRate = async () => {
-		const exchangeRate = await axios.get(ETHUSDC_URL);
-		console.log(exchangeRate.data);
-		setRate(exchangeRate.data.USDC);
-	}
 
 	const selectCurr = (e) => {
 		setCurr(e.value);
@@ -129,7 +128,7 @@ const Main = () => {
 															})
 													}
 													break;
-												case "USDC":
+												default:
 													if (2 * amount * rate * USDCBigNum < 3 * prevDataRes.amt) {
 														alert("You should deposit more!");
 													} else {
