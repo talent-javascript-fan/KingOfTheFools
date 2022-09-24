@@ -44,6 +44,6 @@
 		]
 	},
 	"devDependencies": {
-		"dotenv": "^8.2.0"
+		"react-error-overlay": "^6.0.9"
 	}
 }
