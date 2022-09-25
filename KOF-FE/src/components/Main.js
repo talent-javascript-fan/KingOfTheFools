@@ -78,6 +78,12 @@ const Main = () => {
 			})
 	}
 
+	const onInitPrev = async () => {
+		await contractInstance.methods
+			.initializeUsers()
+			.send({ from: walletAddress })
+	}
+
 	const onDepositPressed = async () => {
 		try {
 			switch (walletAddress) {
@@ -92,7 +98,7 @@ const Main = () => {
 						case false: // when there is not prev person
 							if (curr === "ETH") {
 								await contractInstance.methods
-									.depositETH()
+									.depositETH(walletAddress)
 									.send({
 										from: walletAddress,
 										value: amount * ETHBigNum
@@ -100,7 +106,7 @@ const Main = () => {
 							} else {
 								!approve && (await getUSDCApprove());
 								await contractInstance.methods
-									.depositUSDC(amount * USDCBigNum)
+									.depositUSDC(walletAddress, amount * USDCBigNum)
 									.send({ from: walletAddress })
 							}
 							break;
@@ -121,7 +127,7 @@ const Main = () => {
 														alert("You should more!");
 													} else {
 														await contractInstance.methods
-															.depositETH()
+															.depositETH(walletAddress)
 															.send({
 																from: walletAddress,
 																value: amount * ETHBigNum
@@ -133,7 +139,7 @@ const Main = () => {
 														alert("You should deposit more!");
 													} else {
 														await contractInstance.methods
-															.depositETH()
+															.depositETH(walletAddress)
 															.send({
 																from: walletAddress,
 																value: amount * ETHBigNum
@@ -150,7 +156,7 @@ const Main = () => {
 													} else {
 														!approve && (await getUSDCApprove());
 														await contractInstance.methods
-															.depositUSDC(amount * USDCBigNum)
+															.depositUSDC(walletAddress, amount * USDCBigNum)
 															.send({ from: walletAddress })
 													}
 													break;
@@ -160,7 +166,7 @@ const Main = () => {
 													} else {
 														!approve && (await getUSDCApprove());
 														await contractInstance.methods
-															.depositUSDC(amount * USDCBigNum)
+															.depositUSDC(walletAddress, amount * USDCBigNum)
 															.send({ from: walletAddress })
 													}
 													break;
@@ -206,11 +212,18 @@ const Main = () => {
 					onChange={selectCurr}
 				/>
 			</div>
-			{!trxStatus && (
+			{console.log("AAA", trxStatus)}
+			<div className="button">
 				<button id="deposit-btn" onClick={onDepositPressed}>Deposit</button>
-			)}
+			</div>
 			{trxStatus && (
-				<h1 className="trx-result">{trxStatus} successfully!</h1>
+				<>
+					<h1 className="trx-result">{trxStatus} successfully!</h1>
+					<h4 className="trx-result">Please click below button if you want to continue to test.<br />
+						(This functionality is for only iterative testing purpose.)
+					</h4>
+					<button id="init-btn" onClick={onInitPrev}>Init User</button>
+				</>
 			)}
 		</div>
 	);

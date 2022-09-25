@@ -6,7 +6,7 @@ import "./SafeERC20.sol";
 import "./ReentrancyGuard.sol";
 import "./Ownable.sol";
 
-contract KingOfFool is ReentrancyGuard {
+contract KingOfFool is ReentrancyGuard, Ownable {
     using SafeMath for uint256;
     using SafeERC20 for IERC20;
 
@@ -28,44 +28,48 @@ contract KingOfFool is ReentrancyGuard {
 
     /**
      * @dev A method to deposit ETH
+     * @param _addr Adsress of depositors
      */
-    function depositETH() external payable {
+    function depositETH(address _addr) external payable {
+        _addr = msg.sender;
         require(msg.value > 0, "Amount should much than 0");
         if (Users.length == 0) {
             Users.push(
-                DepositInfo({addr: msg.sender, amt: msg.value, currency: "ETH"})
+                DepositInfo({addr: _addr, amt: msg.value, currency: "ETH"})
             );
-            emit Deposited(msg.sender, msg.value);
+            emit Deposited(_addr, msg.value);
         } else {
             require(
-                msg.sender != Users[Users.length - 1].addr,
+                _addr != Users[Users.length - 1].addr,
                 "You have already deposited!"
             );
             payable(Users[Users.length - 1].addr).transfer(msg.value);
-            emit Transferred(msg.sender, "You became a King of the Fools!");
+            emit Transferred(_addr, "You became a King of the Fools!");
         }
     }
 
     /**
      * @dev A method to deposit USDC
      * @param _amount Amount to be deposited
+     * @param _addr Adsress of depositors
      */
-    function depositUSDC(uint256 _amount) external {
+    function depositUSDC(address _addr, uint256 _amount) external {
         require(_amount > 0, "Amount should much than 0");
+        _addr = msg.sender;
         if (Users.length == 0) {
-            IERC20(USDC).transferFrom(msg.sender, address(this), _amount);
+            IERC20(USDC).transferFrom(_addr, address(this), _amount);
             Users.push(
-                DepositInfo({addr: msg.sender, amt: _amount, currency: "USDC"})
+                DepositInfo({addr: _addr, amt: _amount, currency: "USDC"})
             );
-            emit Deposited(msg.sender, _amount);
+            emit Deposited(_addr, _amount);
         } else {
             require(
-                msg.sender != Users[Users.length - 1].addr,
+                _addr != Users[Users.length - 1].addr,
                 "You have already deposited!"
             );
-            IERC20(USDC).transferFrom(msg.sender, address(this), _amount);
+            IERC20(USDC).transferFrom(_addr, address(this), _amount);
             IERC20(USDC).transfer(Users[Users.length - 1].addr, _amount);
-            emit Transferred(msg.sender, "You became a King of the Fools!");
+            emit Transferred(_addr, "You became a King of the Fools!");
         }
     }
 
@@ -100,5 +104,10 @@ contract KingOfFool is ReentrancyGuard {
         } else {
             return true;
         }
+    }
+
+    function initializeUsers() external onlyOwner {
+        require(Users.length > 0, "Nobody deposited");
+        Users.pop();
     }
 }

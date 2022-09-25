@@ -45,10 +45,11 @@ button:hover {
   line-height: 16px;
 }
 
-#deposit-btn {
+#deposit-btn,
+#init-btn {
   background-color: #254cdd;
   color: white;
-  margin: 50px auto;
+  margin: 20px auto;
   display: block;
 }
 
